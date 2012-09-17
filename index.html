@@ -1,0 +1,76 @@
+<html>
+  <head>  
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.1.min.js"></script>
+  <script type="text/javascript">
+    ;(function($) {
+      
+      function Feedback() {
+        
+      };
+      
+      Feedback.prototype.init = function() {
+        $('body').append($('<div>',{'class':'popup-bg'})
+                 .append($('<div>',{'class':'popup'})
+                 .append($('<form>',{'id':'feedbackform'})
+                 .append($('<table>')
+                 .append($('<tr>')
+                 .append($('<td>', {'colspan':'2'}).append('Your Feedback')))
+                 .append($('<tr>')
+                 .append($('<td>')
+                 .append('Name:'))
+                 .append($('<td>')
+                 .append($('<input>',{'type':'text','name':'name'}))))
+                 .append($('<tr>')
+                 .append($('<td>')
+                 .append('Email:'))
+                 .append($('<td>')
+                 .append($('<input>',{'type':'text','name':'email'}))))                 
+                 .append($('<tr>')
+                 .append($('<td>')
+                 .append('Subject:'))
+                 .append($('<td>')
+                 .append($('<input>',{'type':'text','name':'subject'}))))
+                 .append($('<tr>')
+                 .append($('<td>')
+                 .append('Description:'))
+                 .append($('<td>')
+                 .append($('<textarea>',{'name':'description'}))))
+                 .append($('<tr>')
+                 .append($('<td>')
+                 .append($('<input>',{'type':'button','id':'form-cancel','value':'Cancel'})
+                 .click(function(){
+                    $('.popup').remove();
+                  })))
+                 .append($('<td>')
+                 .append($('<input>',{'type':'button','id':'form-submit','value':'Submit'})
+                 .click(function(){
+                   $.ajax({
+                     url     : 'feedback.php',
+                     dataType: 'json',
+                     type    : 'POST',
+                     data    : $('#feedbackform').serializeArray(),
+                     success : function(res) {
+                       console.log('Result', res);
+                     },
+                     error   : function(err){
+                       
+                     }
+                   });
+                 }))))))));
+      };
+      
+      $.feedback = new Feedback();
+      
+    })(jQuery);
+    
+    $(document).ready(function(){
+      $('body').append($('<input>',{'type':'button','value':'Give Feedback'})
+               .click(function(){
+                 $.feedback.init();
+                 return false;  
+               }));
+    });
+  </script>
+  <title>Your Feedback Form</title>
+  </head>
+</html>
